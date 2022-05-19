@@ -121,7 +121,8 @@ class AmalgationLibSqliteBuilder(build_ext):
                 error_message = 'Fatal error: OpenSSL could not be detected!'
                 raise RuntimeError(error_message)
 
-            openssl = os.path.dirname(os.path.dirname(openssl_conf))
+            # openssl = os.path.dirname(os.path.dirname(openssl_conf))
+            openssl = openssl_conf
             openssl_lib_path = os.path.join(openssl, "lib")
 
             # Configure the compiler
@@ -129,7 +130,10 @@ class AmalgationLibSqliteBuilder(build_ext):
             ext.define_macros.append(("inline", "__inline"))
 
             # Configure the linker
-            openssl_libname = os.environ.get('OPENSSL_LIBNAME') or 'libeay32.lib'
+            # openssl_libname = os.environ.get('OPENSSL_LIBNAME') or 'libeay32.lib'
+
+            # openssl libname has been renamed to 'libcrypto.lib' on windows 
+            openssl_libname = os.environ.get('OPENSSL_LIBNAME') or 'libcrypto.lib'
             ext.extra_link_args.append(openssl_libname)
             ext.extra_link_args.append('/LIBPATH:' + openssl_lib_path)
 
